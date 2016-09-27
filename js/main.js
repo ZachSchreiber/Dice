@@ -1,49 +1,36 @@
 var diceGame = {
-    regions: {
-        winner: "",
-        dice1: null,
-        dice2: null,
-        button: null,
-        current: "",
-    },
 
-    values: {
-        playCaller: null,
-        timekeeper: null,
-        diceValue1: 1,
-        diceValue2: 2,
-        gameTime: null
-    },
+        button: null,
+        dice1: 1,
+        dice2: 2,
+        playCaller: null, //win/lose
+        tries: null,
+        startTime: null,
+
 
     rollDice: function() {
         var diceAmount1 = Math.floor(Math.random() * 6) + 1;
         var diceAmount2 = Math.floor(Math.random() * 6) + 1;
 
 
-        this.values.diceValue1 = diceAmount1;
-        this.values.diceValue2 = diceAmount2;
+                  this.dice1  = diceAmount1;
+                  this.dice2 = diceAmount2;
 
-        this.updateHTML("dice1", "diceValue1");
-        this.updateHTML("dice2", "diceValue2");
-
-
-        this.gameRules();
-    },
-
-    gameRules: function() {
-      if (this.values.diceValue1 + this.values.diceValue2 == 7 || 11) {
-        this.values.playCaller = "You're an Amazing Human Being!";
-      }
-
-      else {
-        this.values.playCaller = "Roll Again";
-      }
-
-      this.updateHTML("winner", "playCaller");
-
-
+        this.editHtml("dice1", "diceAmount1");
+        this.editHtml("dice2", "diceAmount2");
 
     },
+
+  /**  gameRules: function(dice1, dice2) {
+      if (dice1 + dice2 === 7 || 11) {
+      this.values.winner = "Win!";
+    }
+    else {
+      this.values.winner = "Roll Again";
+    }
+    this.updateHTML("winner", "playcaller");
+
+  },**/
 
     getTime: function() {
         var currentTime = new Date();
@@ -55,41 +42,26 @@ var diceGame = {
         var currentSeconds = currentTime.getSeconds();
         var currentTimeString = currentMonth + "/" + currentDate + " " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
 
-        this.values.gameTime = currentTimeString;
+        this.startTime= currentTimeString;
 
-        this.updateHTML("current", "gameTime");
+        this.editHtml("current", "startTime");
 
     },
 
-    defineRegions: function() {
-        this.regions.dice1 = document.getElementById("dice1");
-        this.regions.dice2 = document.getElementById("dice2");
-        this.regions.button = document.getElementById("button");
-    },
-
-    defineValues: function() {
-      this.values.gameTime = document.getElementById("current");
-      this.values.timeKeeper =  document.getElementById("timeElapsed");
-      this.values.playCaller =  document.getElementById("win");
-    },
-
-    updateHTML: function(targetElement, newValue) {
-        var assignedValue = newValue || targetElement;
-        this.regions[targetElement].innerHTML = this.values[assignedValue];
-    },
+       editHtml: function(targetElement, newValue) {
+     document.getElementById[targetElement].innerHtml = [newValue];
+      },
 
     init: function() {
-        this.defineRegions();
-        this.defineValues();
+     this.button = document.getElementById("button");
+     this.dice1 = document.getElementById("dice1");
 
+    // this.editHtml("dice1", "dice1");
+     //this.editHtml("dice2", "dice2");
 
-        this.updateHTML("dice1", "diceValue1");
-        this.updateHTML("dice2", "diceValue2");
-
-        this.regions.button.addEventListener("click", this.rollDice.bind(this));
+     this.button.addEventListener("click", this.rollDice.bind(this));
 
 
     }
-}
-diceGame.getTime();
+};
 diceGame.init();
