@@ -1,11 +1,21 @@
 var diceGame = {
-
+     triesCount: 0,
+    regions: {
         button: null,
         dice1: 1,
         dice2: 2,
-        playCaller: null, //win/lose
+        dealer: null, //win/lose
+        tries: 0,
+        startTime: null
+    },
+
+    values: {
+        dealer: null,
         tries: null,
-        startTime: null,
+        dice1: 35,
+        dice2: 98,
+        startTime: null
+    },
 
 
     rollDice: function() {
@@ -13,25 +23,28 @@ var diceGame = {
         var diceAmount2 = Math.floor(Math.random() * 6) + 1;
 
 
-                  this.dice1  = diceAmount1;
-                  this.dice2 = diceAmount2;
+        this.values.dice1 = diceAmount1;
+        this.values.dice2 = diceAmount2;
 
-        this.editHtml("dice1", "diceAmount1");
-        this.editHtml("dice2", "diceAmount2");
+        this.updateHtml("dice1", "dice1");
+        this.updateHtml("dice2", "dice2");
 
+        console.log("click");
+        var countstring = this.triesCount = this.triesCount + 1;
+        this.values.tries =  "Number of tries: " + countstring;
+        this.updateHtml("tries", "tries");
+        this.gameLogic();
     },
 
-  /**  gameRules: function(dice1, dice2) {
-      if (dice1 + dice2 === 7 || 11) {
-      this.values.winner = "Win!";
-    }
-    else {
-      this.values.winner = "Roll Again";
-    }
-    this.updateHTML("winner", "playcaller");
+    defineRegions: function() {
+        this.regions.dealer = document.getElementById("dealer");
+        this.regions.dice1 = document.getElementById("dice1");
+        this.regions.dice2 = document.getElementById("dice2");
+        this.regions.button = document.getElementById("button");
+        this.regions.tries = document.getElementById("tries");
+        this.regions.startTime = document.getElementById("current");
 
-  },**/
-
+    },
     getTime: function() {
         var currentTime = new Date();
 
@@ -39,27 +52,45 @@ var diceGame = {
         var currentDate = currentTime.getDate();
         var currentHour = currentTime.getHours();
         var currentMinutes = currentTime.getMinutes();
-        var currentSeconds = currentTime.getSeconds();
-        var currentTimeString = currentMonth + "/" + currentDate + " " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
+        var currentYear = currentTime.getFullYear();
+        var currentTimeString =  "Game Started: " + currentMonth + "/" + currentDate + "- " +  currentYear + " at "  + currentHour + ":" + currentMinutes;
 
-        this.startTime= currentTimeString;
+        this.values.startTime = currentTimeString;
 
-        this.editHtml("current", "startTime");
+        this.updateHtml("startTime", "startTime");
 
     },
 
-       editHtml: function(targetElement, newValue) {
-     document.getElementById[targetElement].innerHtml = [newValue];
-      },
+    gameLogic: function() {
+      var total = this.values.dice1 + this.values.dice2;
+
+      if (total === 7 || total === 11) {
+
+           this.values.dealer = "Yer a Wizard, Harry! " + this.values.tries;
+           this.updateHtml("dealer", "dealer");
+           var backColor = document.querySelector("#game");
+           backColor.style.backgroundColor = "#99ffff";
+       }
+       else {
+         this.values.dealer = "Roll again, big fella.";
+         this.updateHtml("dealer", "dealer");
+         backColor = document.querySelector("#game");
+         backColor.style.backgroundColor = "#fff";
+      }
+
+    },
+
+    updateHtml: function(targetElement, newValue) {
+        var assignedValue = newValue || targetElement;
+        this.regions[targetElement].innerHTML = this.values[assignedValue];
+    },
 
     init: function() {
-     this.button = document.getElementById("button");
-     this.dice1 = document.getElementById("dice1");
+        this.defineRegions();
+        this.getTime();
 
-    // this.editHtml("dice1", "dice1");
-     //this.editHtml("dice2", "dice2");
 
-     this.button.addEventListener("click", this.rollDice.bind(this));
+        this.regions.button.addEventListener("click", this.rollDice.bind(this));
 
 
     }
