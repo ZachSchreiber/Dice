@@ -70,7 +70,10 @@ var diceGame = {
            this.updateHtml("dealer", "dealer");
            var backColor = document.querySelector("#game");
            backColor.style.backgroundColor = "#99ffff";
+           this.triesCount = 0;
+
        }
+
        else {
          this.values.dealer = "Roll again, big fella.";
          this.updateHtml("dealer", "dealer");
@@ -88,7 +91,6 @@ var diceGame = {
     init: function() {
         this.defineRegions();
         this.getTime();
-
 
         this.regions.button.addEventListener("click", this.rollDice.bind(this));
 
